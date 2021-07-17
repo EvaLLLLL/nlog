@@ -1,12 +1,26 @@
 /**
- * @file FIX ME WHEN YOU SEE ME! 请对本文件的用途或内容进行说明...
+ * @file page - first-post
  */
- 
- import React from 'react'
- 
-const FirstPost: React.FC = () => {
-    
-    return (<>FirstPost</>)
- }
 
- export default FirstPost
+import Link from 'next/link';
+import {useCallback} from 'react';
+
+export default function FirstPost() {
+  console.log('执行了')
+  
+  const clickMe = useCallback(() => {
+    console.log('you clicked me')
+  }, [])
+  
+  return (
+    <>
+    First Post
+    <hr/>
+    
+    <button onClick={clickMe}>click me</button>
+    
+    <hr/>
+    <Link href="/"><button>回到首页</button></Link>
+  </>
+  )
+ }
