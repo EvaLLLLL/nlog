@@ -3,37 +3,43 @@
  */
 
 import React from 'react'
-import { NextPage } from 'next'
+import { GetStaticProps, NextPage } from 'next'
+import { getPosts } from '../api/posts/getPosts'
 import Markdown from 'react-markdown'
-import { usePosts } from '../../hooks/usePosts'
 
-const PostsEntry: NextPage = () => {
-  const { posts, loading } = usePosts()
+type Props = {
+  posts: {
+    title: string
+    date: string
+    content: string
+  }[]
+}
 
+const PostsEntry: NextPage<Props> = props => {
+  const { posts } = props
   return (
     <>
-      {loading ? (
-        <div>...加载中</div>
-      ) : (
-        <ul>
-          {!posts.length ? (
-            <>暂无文章</>
-          ) : (
-            <>
-              {posts.map(({ title, date, content }) => (
-                <li key={title}>
-                  <h1>标题：{title}</h1>
-                  <p>日期：{date}</p>
+      <ul>
+        {posts.map(({ title, date, content }) => (
+          <li key={title}>
+            <h1>{title}</h1>
+            <p>{date}</p>
 
-                  <Markdown>{content}</Markdown>
-                </li>
-              ))}
-            </>
-          )}
-        </ul>
-      )}
+            <Markdown>{content}</Markdown>
+          </li>
+        ))}
+      </ul>
     </>
   )
 }
 
 export default PostsEntry
+
+export const getStaticProps: GetStaticProps = async () => {
+  const posts = await getPosts()
+  return {
+    props: {
+      posts: JSON.parse(JSON.stringify(posts)),
+    },
+  }
+}
