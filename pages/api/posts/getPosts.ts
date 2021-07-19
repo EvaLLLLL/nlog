@@ -6,12 +6,14 @@ import path from 'path'
 import fs, { promises as fsPromise } from 'fs'
 import matter from 'gray-matter'
 
-export const getPosts = async () => {
+export const getPosts = async (fileNames?: string[]) => {
   const markDownDir = path.join(process.cwd(), 'markdown')
 
-  const fileList = await fsPromise.readdir(markDownDir)
+  const _fileNames =
+    fileNames?.map(name => `${name}.md`) ||
+    (await fsPromise.readdir(markDownDir))
 
-  return fileList.map(fileName => {
+  return _fileNames.map(fileName => {
     const fullPath = path.join(markDownDir, fileName)
     const text = fs.readFileSync(fullPath, 'utf8')
 

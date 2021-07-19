@@ -2,38 +2,47 @@
  * @file Posts-Entry
  */
 
-import React, { useEffect, useState } from 'react'
-import { GetServerSideProps, NextPage } from 'next'
-import UAParser from 'ua-parser-js'
+import React from 'react'
+import { GetStaticProps, NextPage } from 'next'
+import { getPosts } from '../api/posts/getPosts'
+import Markdown from 'react-markdown'
+import Link from 'next/link'
 
 type Props = {
-  agent: { name: string; version: string; major: string }
+  posts: {
+    title: string
+    date: string
+    content: string
+  }[]
 }
 
 const PostsEntry: NextPage<Props> = props => {
-  const { agent } = props
-  const [width, setWidth] = useState(0)
-  useEffect(() => {
-    setWidth(document.documentElement.clientWidth)
-  }, [])
+  const { posts } = props
   return (
     <>
-      <div>你的浏览器是：{agent.name || ''}</div>
-      <div>版本是：{agent.version || ''}</div>
-      <div>现在浏览器的宽度是：{width}px 像素</div>
+      <ul>
+        {posts.map(({ title, date, content }) => (
+          <li key={title}>
+            <Link href={`/posts/${title}`} passHref={true}>
+              {title}
+            </Link>
+            <p>{date}</p>
+
+            <Markdown>{content}</Markdown>
+          </li>
+        ))}
+      </ul>
     </>
   )
 }
 
 export default PostsEntry
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const ua = context.req.headers['user-agent']
-  const result = new UAParser(ua).getResult()
-
+export const getStaticProps: GetStaticProps = async () => {
+  const posts = await getPosts()
   return {
     props: {
-      agent: JSON.parse(JSON.stringify(result.browser)),
+      posts: JSON.parse(JSON.stringify(posts)),
     },
   }
 }
