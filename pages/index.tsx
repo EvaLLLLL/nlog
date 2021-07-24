@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <>
       第一篇文章：
-      <Link href="/posts/first-post">
+      <Link href="/posts/first-post" passHref={true}>
         <Title>点击查看</Title>
       </Link>
       

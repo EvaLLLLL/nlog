@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port=4000",
+    "dev": "next dev --port=4000 & babel -w ./src --out-dir dist --extensions .ts,.tsx",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migration:run": "typeorm migration:run",
+    "migration:revert": "typeorm migration:revert"
   },
   "dependencies": {
     "@babel/cli": "^7.14.8",
