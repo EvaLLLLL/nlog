@@ -54,6 +54,9 @@ var _Comment = require("./entity/Comment");
             return connection.close();
 
           case 20:
+            console.log('seed success!');
+
+          case 21:
           case "end":
             return _context.stop();
         }

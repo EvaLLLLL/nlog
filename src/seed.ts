@@ -29,5 +29,6 @@ createConnection()
     await manager.save(c1);
 
     await connection.close();
+    console.log('seed success!');
   })
   .catch(error => console.log(error));

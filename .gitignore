@@ -3,6 +3,7 @@
 /.vscode
 *.log
 *.local
+/blog-data
 
 # dependencies
 /node_modules
