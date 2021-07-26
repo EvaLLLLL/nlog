@@ -2,22 +2,23 @@
  * @file Posts-Entry
  */
 
-import React from 'react'
-import { GetStaticProps, NextPage } from 'next'
-import { getPosts } from '../api/posts/getPosts'
-import Markdown from 'react-markdown'
-import Link from 'next/link'
+import React from 'react';
+import { GetStaticProps, NextPage } from 'next';
+import { getPosts } from '../api/posts/getPosts';
+import Markdown from 'react-markdown';
+import Link from 'next/link';
+import { getDatabaseConnection } from '../../lib/getDatabaseConnection';
 
 type Props = {
   posts: {
-    title: string
-    date: string
-    content: string
-  }[]
-}
+    title: string;
+    date: string;
+    content: string;
+  }[];
+};
 
 const PostsEntry: NextPage<Props> = props => {
-  const { posts } = props
+  const { posts } = props;
   return (
     <>
       <ul>
@@ -33,16 +34,17 @@ const PostsEntry: NextPage<Props> = props => {
         ))}
       </ul>
     </>
-  )
-}
+  );
+};
 
-export default PostsEntry
+export default PostsEntry;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const posts = await getPosts()
+  const connection = await getDatabaseConnection();
+  const posts = await getPosts();
   return {
     props: {
       posts: JSON.parse(JSON.stringify(posts)),
     },
-  }
-}
+  };
+};
