@@ -2,7 +2,6 @@
  * @file getDatabaseConnection
  */
 
-import React from 'react';
 import { createConnection, getConnectionManager } from 'typeorm';
 
 const promise = (async function () {

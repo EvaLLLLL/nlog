@@ -3,8 +3,7 @@
 ### 创建容器
 
 ```bash
-rm -rf blog-data
-mkdir blog-data
+rm -rf blog-data && mkdir blog-data
 docker run -v "$PWD/blog-data":/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_USER=blog -e POSTGRES_HOST_AUTH_METHOD=trust -d postgres:12.2
 ```
 
@@ -12,6 +11,7 @@ docker run -v "$PWD/blog-data":/var/lib/postgresql/data -p 5432:5432 -e POSTGRES
 
 ```bash
 docker exec -it xxx bash
+psql -U blog -W
 
 CREATE DATABASE blog_development ENCODING 'UTF8' LC_COLLATE 'en_US.utf8' LC_CTYPE 'en_US.utf8';
 ```
