@@ -5,6 +5,7 @@
 import { GetServerSideProps } from 'next';
 import { getDatabaseConnection } from '../lib/getDatabaseConnection';
 import { Post } from 'src/entity/Post';
+import Link from 'next/link';
 
 type Props = {
   posts: Post[];
@@ -15,8 +16,13 @@ export default function Home(Props) {
   const parsedPosts = JSON.parse(posts);
   return (
     <div>
+      <h1>文章列表</h1>
       {parsedPosts.map(post => {
-        return <div key={post.id}>{post.title}</div>;
+        return (
+          <Link key={post.id} passHref={true} href={`/posts/${post.id}`}>
+            <a>{post.title}</a>
+          </Link>
+        );
       })}
     </div>
   );
