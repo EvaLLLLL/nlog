@@ -2,30 +2,32 @@
  * @file page - index
  */
 
-import Image from 'next/image'
-import Link from 'next/link'
-import styled from 'styled-components'
-import png from 'assets/images/flight.jpg'
+import { GetServerSideProps } from 'next';
+import { getDatabaseConnection } from '../lib/getDatabaseConnection';
+import { Post } from 'src/entity/Post';
 
-export default function Home() {
+type Props = {
+  posts: Post[];
+};
+
+export default function Home(Props) {
+  const { posts } = Props;
+  const parsedPosts = JSON.parse(posts);
   return (
-    <>
-      第一篇文章：
-      <Link href="/posts/first-post" passHref={true}>
-        <Title>点击查看</Title>
-      </Link>
-      
-      <Image src={png} alt=""/>
-    </>
-  )
+    <div>
+      {parsedPosts.map(post => {
+        return <div key={post.id}>{post.title}</div>;
+      })}
+    </div>
+  );
 }
 
-const Title = styled.p`
-  cursor: pointer;
-  border: 1px solid pink;
-  width: 100px;
-  text-align: center;
-  &:hover {
-    background: lightgray;
-  }
-`
+export const getServerSideProps: GetServerSideProps = async context => {
+  const connection = await getDatabaseConnection();
+  const posts = await connection.manager.find(Post);
+  return {
+    props: {
+      posts: JSON.stringify(posts),
+    },
+  };
+};
