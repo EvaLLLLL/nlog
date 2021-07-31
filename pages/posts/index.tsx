@@ -4,17 +4,13 @@
 
 import React from 'react';
 import { GetStaticProps, NextPage } from 'next';
-import { getPosts } from '../api/posts/getPosts';
 import Markdown from 'react-markdown';
 import Link from 'next/link';
 import { getDatabaseConnection } from '../../lib/getDatabaseConnection';
+import { Post } from '../../src/entity/Post';
 
 type Props = {
-  posts: {
-    title: string;
-    date: string;
-    content: string;
-  }[];
+  posts: Post[];
 };
 
 const PostsEntry: NextPage<Props> = props => {
@@ -22,12 +18,12 @@ const PostsEntry: NextPage<Props> = props => {
   return (
     <>
       <ul>
-        {posts.map(({ title, date, content }) => (
+        {posts.map(({ id, title, createdAt, content }) => (
           <li key={title}>
-            <Link href={`/posts/${title}`} passHref={true}>
+            <Link href={`/posts/${id}`} passHref={true}>
               {title}
             </Link>
-            <p>{date}</p>
+            <p>{createdAt}</p>
 
             <Markdown>{content}</Markdown>
           </li>
@@ -41,7 +37,7 @@ export default PostsEntry;
 
 export const getStaticProps: GetStaticProps = async () => {
   const connection = await getDatabaseConnection();
-  const posts = await getPosts();
+  const posts = await connection.manager.find(Post);
   return {
     props: {
       posts: JSON.parse(JSON.stringify(posts)),
